@@ -5,7 +5,7 @@
 *.tsv
 *.env
 /build/*
-/docs/
+/docs/**
 tmp_*.py
 /examples/**/output/*
 examples/datasets/*/
@@ -22,3 +22,5 @@ nr_*/
 /docs/make.bat
 /docs/Makefile
 /examples/training/quora_duplicate_questions/quora-IR-dataset/
+docs/_themes/sphinx_rtd_theme/__init__.py
+docs/_themes/sphinx_rtd_theme/__init__.py
