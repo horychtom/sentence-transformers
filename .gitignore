@@ -3,6 +3,9 @@
 *.pyc
 *.gz
 *.tsv
+*.env
+/build/*
+/docs/
 tmp_*.py
 /examples/**/output/*
 examples/datasets/*/
