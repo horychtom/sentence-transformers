@@ -11,7 +11,7 @@ First, it is important to understand the difference between Bi- and Cross-Encode
 ![BiEncoder](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/Bi_vs_Cross-Encoder.png)
 
 
-In contrast, for a **Cross-Encoder**,  we pass both sentences simultaneously to the Transformer network. It produces then an output value between 0 and 1 indicating the similarity of the input sentence pair: 
+In contrast, for a **Cross-Encoder**,  we pass both sentences simultaneously to the Transformer network. It produces then an output value between 0 and 1 indicating the similarity of the input sentence pair:
 
 
 
@@ -33,7 +33,7 @@ Using Cross-Encoders is quite easy:
 ```python
 from sentence_transformers.cross_encoder import CrossEncoder
 model = CrossEncoder('model_name_or_path')
-scores = model.predict([["My first", "sentence pair"],  
+scores = model.predict([["My first", "sentence pair"],
                         ["Second text", "pair"]])
 ```
 
@@ -53,5 +53,5 @@ Cross-Encoder achieve higher performance than Bi-Encoders, however, they do not 
 
 For more details on combing Bi- and Cross-Encoders, see [Application - Information Retrieval](../retrieve_rerank/README.md).
 
-## Training Cross-Encoders 
+## Training Cross-Encoders
 See [Cross-Encoder Training](../../training/cross-encoder/README.md) how to train your own Cross-Encoder models.

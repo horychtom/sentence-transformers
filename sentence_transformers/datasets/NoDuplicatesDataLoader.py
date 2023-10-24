@@ -1,8 +1,8 @@
 import random
 import math
 
-class NoDuplicatesDataLoader:
 
+class NoDuplicatesDataLoader:
     def __init__(self, train_examples, batch_size):
         """
         A special data loader to be used with MultipleNegativesRankingLoss.
@@ -38,7 +38,9 @@ class NoDuplicatesDataLoader:
                     self.data_pointer = 0
                     random.shuffle(self.train_examples)
 
-            yield self.collate_fn(batch) if self.collate_fn is not None else batch
+            yield self.collate_fn(
+                batch,
+            ) if self.collate_fn is not None else batch
 
     def __len__(self):
         return math.floor(len(self.train_examples) / self.batch_size)

@@ -73,7 +73,7 @@ with open(os.path.join(dataset_path, "classification/train_pairs.tsv"), encoding
 train_dataset = SentencesDataset(train_samples, model=model)
 train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=train_batch_size)
 train_loss = losses.OnlineContrastiveLoss(model=model, distance_metric=distance_metric, margin=margin)
-``` 
+```
 
 For each row in our train dataset, we create new InputExample objects and the two questions as texts and the is_duplicate as the label.
 
@@ -89,7 +89,7 @@ From all pairs, we sample a mini-batch *(a_1, b_1), ..., (a_n, b_n)* where *(a_i
 MultipleNegativesRankingLoss now uses all *b_j* with j != i as negative example for *(a_i, b_i)*. For example, for *a_1* we have given the options *(b_1, ..., b_n)* and we need to identify which is the correct duplicate question to *a_1*. We do this by computing the dot-product between the embedding of *a_1* and all *b*'s and softmax normalize it so that we get a probability distribution over *(b_1, ..., b_n)*. In the best case, the positive example *b_1* get a probability of close to 1 while all others get scores close to 0. We use negative log-likelihood to compute the loss.
 
 
-*MultipleNegativesRankingLoss* implements this idea in an efficient way so that the embeddings are re-used. With a batch-size of 64, we have 64 positive pairs and each positive pairs has 64-1 negative distractors. 
+*MultipleNegativesRankingLoss* implements this idea in an efficient way so that the embeddings are re-used. With a batch-size of 64, we have 64 positive pairs and each positive pairs has 64-1 negative distractors.
 
 
 Using the loss is easy and does not require tuning of any hyperparameters:
@@ -153,4 +153,3 @@ model.fit(train_objectives=[(train_dataloader_MultipleNegativesRankingLoss, trai
           output_path=model_save_path
           )
 ```
-

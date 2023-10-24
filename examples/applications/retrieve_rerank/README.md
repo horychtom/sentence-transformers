@@ -1,5 +1,5 @@
 # Retrieve & Re-Rank
-In [Semantic Search](../semantic-search/README.md) we have shown how to use SentenceTransformer to compute embeddings for queries, sentences, and paragraphs and how to use this for semantic search. 
+In [Semantic Search](../semantic-search/README.md) we have shown how to use SentenceTransformer to compute embeddings for queries, sentences, and paragraphs and how to use this for semantic search.
 
 For complex search tasks, for example, for question answering retrieval, the search can significantly be improved by using **Retrieve & Re-Rank**.
 
@@ -9,16 +9,16 @@ A pipeline for information retrieval / question answering retrieval that works w
 
 ![InformationRetrieval](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/InformationRetrieval.png)
 
-Given a search query, we first use a **retrieval system** that retrieves a large list of e.g. 100 possible hits which are potentially relevant for the query. For the retrieval, we can use either lexical search, e.g. with ElasticSearch, or we can use dense retrieval with a bi-encoder. 
+Given a search query, we first use a **retrieval system** that retrieves a large list of e.g. 100 possible hits which are potentially relevant for the query. For the retrieval, we can use either lexical search, e.g. with ElasticSearch, or we can use dense retrieval with a bi-encoder.
 
-However, the retrieval system might retrieve documents that are not that relevant for the search query. Hence, in a second stage, we use a **re-ranker** based on a **cross-encoder** that scores the relevancy of all candidates for the given search query. 
+However, the retrieval system might retrieve documents that are not that relevant for the search query. Hence, in a second stage, we use a **re-ranker** based on a **cross-encoder** that scores the relevancy of all candidates for the given search query.
 
 The output will be a ranked list of hits we can present to the user.
 
 ## Retrieval: Bi-Encoder
 For the retrieval of the candidate set, we can either use lexical search (e.g. [ElasticSearch](https://www.elastic.co/elasticsearch/)), or we can use a bi-encoder which is implemented in this repository.
 
-Lexical search looks for literal matches of the query words in your document collection. It will not recognize synonyms, acronyms or spelling variations. In contrast, semantic search (or dense retrieval) encodes the search query into vector space and retrieves the document embeddings that are close in vector space. 
+Lexical search looks for literal matches of the query words in your document collection. It will not recognize synonyms, acronyms or spelling variations. In contrast, semantic search (or dense retrieval) encodes the search query into vector space and retrieves the document embeddings that are close in vector space.
 
 ![SemanticSearch](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/SemanticSearch.png)
 
@@ -29,11 +29,11 @@ Semantic search overcomes the short comings of lexical search and can recognize 
 
 The retriever has to be efficient for large document collections with millions of entries. However, it might return irrelevant candidates.
 
-A re-ranker based on a Cross-Encoder can substantially improve the final results for the user. The query and a possible document is passed simultaneously to transformer network, which then outputs a single score between 0 and 1 indicating how relevant the document is for the given query. 
+A re-ranker based on a Cross-Encoder can substantially improve the final results for the user. The query and a possible document is passed simultaneously to transformer network, which then outputs a single score between 0 and 1 indicating how relevant the document is for the given query.
 
 ![CrossEncoder](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/CrossEncoder.png)
 
-The advantage of Cross-Encoders is the higher performance, as they perform attention across the query and the document. 
+The advantage of Cross-Encoders is the higher performance, as they perform attention across the query and the document.
 
 Scoring thousands or millions of (query, document)-pairs would be rather slow. Hence, we use the retriever to create a set of e.g. 100 possible candidates which are then re-ranked by the Cross-Encoder.
 
@@ -61,7 +61,7 @@ query_embedding = model.encode(query)
 For more details how to compare the embeddings, see [semantic search](../semantic-search/README.md).
 
 We provide pre-trained models based on:
-- **MS MARCO:** 500k real user queries from Bing search engine. See [MS MARCO models](https://www.sbert.net/docs/pretrained-models/msmarco-v3.html) 
+- **MS MARCO:** 500k real user queries from Bing search engine. See [MS MARCO models](https://www.sbert.net/docs/pretrained-models/msmarco-v3.html)
 
 ## Pre-trained Cross-Encoders (Re-Ranker)
 

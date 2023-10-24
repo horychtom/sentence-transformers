@@ -80,7 +80,7 @@ We extended the STS2017 and added cross-lingual test data for English-German, Fr
     <td align="center">70.8</td>
     <td align="center">68.5</td>
     <td align="center">69.5</td>
-  </tr> 
+  </tr>
   <tr>
     <td colspan="12"><b>Sentence Transformer Models</b></td>
   </tr>
@@ -108,10 +108,10 @@ The idea is based on a fixed (monolingual) **teacher model**, that produces sent
 
 In the above figure, the student model should map *Hello World* and the German translation *Hallo Welt* to the vector of *teacher_model('Hello World')*. We achieve this by training the student model using mean squared error (MSE) loss.
 
-In our experiments we initiliazed the student model with the multilingual XLM-RoBERTa model. 
+In our experiments we initiliazed the student model with the multilingual XLM-RoBERTa model.
 
-## Training 
-For a **fully automatic code example**, see [make_multilingual.py](make_multilingual.py). 
+## Training
+For a **fully automatic code example**, see [make_multilingual.py](make_multilingual.py).
 
 This scripts downloads the [TED2020 corpus](https://github.com/UKPLab/sentence-transformers/blob/master/docs/datasets/TED2020.md?), a corpus with transcripts and translations from TED and TEDx talks. It than extends a monolingual model to several languages (en, de, es, it, fr, ar, tr). TED2020 contains parallel data for more than 100 languages, hence, you can simple change the script and train a multilingual model in your favorite languages.
 
@@ -153,7 +153,7 @@ You load a file with the *load_data()* method. You can load multiple files by ca
 Per default, all datasets are weighted equally. In the above example a (source, translation)-pair will be sampled equally from all three datasets. If you pass a `weight` parameter (integer), you can weight some datasets higher or lower.
 
 ## Sources for Training Data
-A great website for a vast number of parallel (translated) datasets is [OPUS](http://opus.nlpl.eu/). There, you find parallel datasets for more than 400 languages. 
+A great website for a vast number of parallel (translated) datasets is [OPUS](http://opus.nlpl.eu/). There, you find parallel datasets for more than 400 languages.
 
 The [examples/training/multilingual](https://github.com/UKPLab/sentence-transformers/blob/master/examples/training/multilingual/) folder contains some scripts that downloads parallel training data and brings it into the right format:
 - [get_parallel_data_opus.py](get_parallel_data_opus.py): This script downloads data from the [OPUS](http://opus.nlpl.eu/) website.
@@ -162,7 +162,7 @@ The [examples/training/multilingual](https://github.com/UKPLab/sentence-transfor
 
 ## Evaluation
 
-Training can be evaluated in different ways. For an example how to use these evaluation methods, see [make_multilingual.py](make_multilingual.py). 
+Training can be evaluated in different ways. For an example how to use these evaluation methods, see [make_multilingual.py](make_multilingual.py).
 
 ### MSE Evaluation
 You can measure the mean squared error (MSE) between the student embeddings and teacher embeddings. This can be achieved with the ``
@@ -177,7 +177,7 @@ This evaluator computes the teacher embeddings for the `src_sentences`, for exam
 ### Translation Accuracy
 You can also measure the translation accuracy. Given a list with source sentences, for example, 1000 English sentences. And a list with matching target (translated) sentences, for example, 1000 Spanish sentences.
 
-For each sentence pair, we check if their embeddings are the closest using cosine similarity. I.e., for each `src_sentences[i]` we check if `trg_sentences[i]` has the highest similarity out of all target sentences. If this is the case, we have a hit, otherwise an error. This evaluator reports accuracy (higher = better). 
+For each sentence pair, we check if their embeddings are the closest using cosine similarity. I.e., for each `src_sentences[i]` we check if `trg_sentences[i]` has the highest similarity out of all target sentences. If this is the case, we have a hit, otherwise an error. This evaluator reports accuracy (higher = better).
 
 ```python
 # src_sentences and trg_sentences are lists of translated sentences, such that trg_sentences[i] is the translation of src_sentences[i]
@@ -196,7 +196,7 @@ Where `sentences1` and `sentences2` are lists of sentences and score is numeric 
 
 ## Citation
 If you use the code for multilingual models, feel free to cite our publication [Making Monolingual Sentence Embeddings Multilingual using Knowledge Distillation](https://arxiv.org/abs/2004.09813):
-``` 
+```
 @article{reimers-2020-multilingual-sentence-bert,
     title = "Making Monolingual Sentence Embeddings Multilingual using Knowledge Distillation",
     author = "Reimers, Nils and Gurevych, Iryna",

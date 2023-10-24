@@ -31,7 +31,7 @@ SimCSE will be training using these sentences. Checkpoints are stored every 500 
 
 
 
-## Further Training Examples 
+## Further Training Examples
 
 - **[train_stsb_ct.py](train_stsb_ct.py)**: This example uses 1 million sentences from Wikipedia to train with CT. It evaluate the performance on the  [STSbenchmark dataset](https://ixa2.si.ehu.eus/stswiki/index.php/STSbenchmark).
 - **[train_askubuntu_ct.py](train_askubuntu_ct.py)**: This example trains on [AskUbuntu Questions dataset](https://github.com/taolei87/askubuntu), a dataset with questions from the AskUbuntu Stackexchange forum.

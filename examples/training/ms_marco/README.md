@@ -25,7 +25,7 @@ When we use [MultipleNegativesRankingLoss](https://www.sbert.net/docs/package_re
 
 We compute the embeddings for all queries, positive passages, and negative passages in the corpus and then optimize the following objective: We want to have the `(query, positive_passage)` pair to be close in the vector space, while `(query, negative_passage)` should be distant in vector space.
 
-To further improve the training, we use **in-batch negatives**: 
+To further improve the training, we use **in-batch negatives**:
 
 ![MultipleNegativesRankingLoss](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/MultipleNegativeRankingLoss.png)
 
@@ -41,11 +41,11 @@ For MultipleNegativesRankingLoss, we must ensure that in the triplet `(query, po
 ### MarginMSE
 **Training code: [train_bi-encoder_margin-mse.py](train_bi-encoder_margin-mse.py)**
 
-[MarginMSELoss](https://www.sbert.net/docs/package_reference/losses.html#marginmseloss) is based on the paper of [Hofstätter et al](https://arxiv.org/abs/2010.02666). As for MultipleNegativesRankingLoss, we have triplets: `(query, passage1, passage2)`. In contrast to MultipleNegativesRankingLoss, `passage1` and `passage2` do not have to be strictly positive/negative, both can be relevant or not relevant for a given query.  
+[MarginMSELoss](https://www.sbert.net/docs/package_reference/losses.html#marginmseloss) is based on the paper of [Hofstätter et al](https://arxiv.org/abs/2010.02666). As for MultipleNegativesRankingLoss, we have triplets: `(query, passage1, passage2)`. In contrast to MultipleNegativesRankingLoss, `passage1` and `passage2` do not have to be strictly positive/negative, both can be relevant or not relevant for a given query.
 
-We then compute the [Cross-Encoder](../../applications/cross-encoder/README.md) score for `(query, passage1)` and `(query, passage2)`. We provide scores for 160 million such pairs in our [msmarco-hard-negatives dataset](https://huggingface.co/datasets/sentence-transformers/msmarco-hard-negatives). We then compute the distance: `CE_distance = CEScore(query, passage1) - CEScore(query, passage2)` 
+We then compute the [Cross-Encoder](../../applications/cross-encoder/README.md) score for `(query, passage1)` and `(query, passage2)`. We provide scores for 160 million such pairs in our [msmarco-hard-negatives dataset](https://huggingface.co/datasets/sentence-transformers/msmarco-hard-negatives). We then compute the distance: `CE_distance = CEScore(query, passage1) - CEScore(query, passage2)`
 
-For our bi-encoder training, we encode `query`, `passage1`, and `passage2` into vector spaces and then measure the dot-product between  `(query, passage1)` and `(query, passage2)`. Again, we measure the distance: `BE_distance = DotScore(query, passage1) - DotScore(query, passage2)` 
+For our bi-encoder training, we encode `query`, `passage1`, and `passage2` into vector spaces and then measure the dot-product between  `(query, passage1)` and `(query, passage2)`. Again, we measure the distance: `BE_distance = DotScore(query, passage1) - DotScore(query, passage2)`
 
 We then want to ensure that the distance predicted by the bi-encoder is close to the distance predicted by the cross-encoder, i.e., we optimize the mean-squared error (MSE) between `CE_distance` and `BE_distance`.
 
@@ -58,11 +58,11 @@ A [Cross-Encoder](https://www.sbert.net/examples/applications/cross-encoder/READ
 
 ![CrossEncoder](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/CrossEncoder.png)
 
-Cross-Encoders are often used for **re-ranking:** Given a list with possible relevant passages for a query, for example retrieved from BM25 / ElasticSearch, the cross-encoder re-ranks this list so that the most relevant passages are the top of the result list. 
+Cross-Encoders are often used for **re-ranking:** Given a list with possible relevant passages for a query, for example retrieved from BM25 / ElasticSearch, the cross-encoder re-ranks this list so that the most relevant passages are the top of the result list.
 
-To **train an cross-encoder** on the MS MARCO dataset, see: 
+To **train an cross-encoder** on the MS MARCO dataset, see:
 - **[train_cross-encoder_scratch.py](train_cross-encoder_scratch.py)** trains a cross-encoder from scratch using the provided data from the MS MARCO dataset.
-  
+
 ## Cross-Encoder Knowledge Distillation
 ![](https://github.com/UKPLab/sentence-transformers/raw/master/docs/img/msmarco-training-ce-distillation.png)
 - **[train_cross-encoder_kd.py](train_cross-encoder_kd.py)** uses a knowledge distillation setup: [Hostätter et al.](https://arxiv.org/abs/2010.02666) trained an ensemble of 3 (large) models for the MS MARCO dataset and predicted the scores for various (query, passage)-pairs (50% positive, 50% negative). In this example, we use knowledge distillation with a small & fast model and learn the logits scores from the teacher ensemble. This yields performances comparable to  large models, while being 18 times faster.

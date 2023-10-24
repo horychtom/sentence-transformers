@@ -3,12 +3,12 @@ The script shows how to train Augmented SBERT (In-Domain) strategy for STSb data
 We utilise nlpaug (https://github.com/makcedward/nlpaug) for data augmentation strategies over a single sentence.
 
 We chose synonym replacement for our example with (can be extended to other techniques) -
-    1. Word-embeddings (word2vec) 
+    1. Word-embeddings (word2vec)
     2. WordNet
     3. Contextual word-embeddings (BERT)
 
 Methodology:
-Take a gold STSb pair, like (A, B, 0.6) Then replace synonyms in A and B, which gives you (A', B', 0.6) 
+Take a gold STSb pair, like (A, B, 0.6) Then replace synonyms in A and B, which gives you (A', B', 0.6)
 These are the silver data and SBERT is finally trained on (gold + silver) STSb data.
 
 Additional requirements:
@@ -31,9 +31,15 @@ python train_sts_indomain_nlpaug.py
 from torch.utils.data import DataLoader
 import torch
 import math
-from sentence_transformers import SentenceTransformer, LoggingHandler, losses, models, util
+from sentence_transformers import (
+    SentenceTransformer,
+    LoggingHandler,
+    losses,
+    models,
+    util,
+)
 from sentence_transformers.evaluation import EmbeddingSimilarityEvaluator
-from sentence_transformers.readers import STSBenchmarkDataReader, InputExample
+from sentence_transformers.readers import InputExample
 import nlpaug.augmenter.word as naw
 import logging
 from datetime import datetime
@@ -44,28 +50,38 @@ import csv
 import tqdm
 
 #### Just some code to print debug information to stdout
-logging.basicConfig(format='%(asctime)s - %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S',
-                    level=logging.INFO,
-                    handlers=[LoggingHandler()])
+logging.basicConfig(
+    format="%(asctime)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO,
+    handlers=[LoggingHandler()],
+)
 #### /print debug information to stdout
 
-#You can specify any huggingface/transformers pre-trained model here, for example, bert-base-uncased, roberta-base, xlm-roberta-base
-model_name = sys.argv[1] if len(sys.argv) > 1 else 'bert-base-uncased'
+# You can specify any huggingface/transformers pre-trained model here, for example, bert-base-uncased, roberta-base, xlm-roberta-base
+model_name = sys.argv[1] if len(sys.argv) > 1 else "bert-base-uncased"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 batch_size = 16
 num_epochs = 1
 
 ###### Read Datasets ######
 
-#Check if dataset exsist. If not, download and extract  it
-sts_dataset_path = 'datasets/stsbenchmark.tsv.gz'
+# Check if dataset exsist. If not, download and extract  it
+sts_dataset_path = "datasets/stsbenchmark.tsv.gz"
 
 if not os.path.exists(sts_dataset_path):
-    util.http_get('https://sbert.net/datasets/stsbenchmark.tsv.gz', sts_dataset_path)
+    util.http_get(
+        "https://sbert.net/datasets/stsbenchmark.tsv.gz",
+        sts_dataset_path,
+    )
 
 
-model_save_path = 'output/bi-encoder/stsb_indomain_eda_'+model_name.replace("/", "-")+'-'+datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+model_save_path = (
+    "output/bi-encoder/stsb_indomain_eda_"
+    + model_name.replace("/", "-")
+    + "-"
+    + datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+)
 
 ###### Bi-encoder (sentence-transformers) ######
 logging.info("Loading SBERT model: {}".format(model_name))
@@ -73,10 +89,12 @@ logging.info("Loading SBERT model: {}".format(model_name))
 word_embedding_model = models.Transformer(model_name)
 
 # Apply mean pooling to get one fixed sized sentence vector
-pooling_model = models.Pooling(word_embedding_model.get_word_embedding_dimension(),
-                               pooling_mode_mean_tokens=True,
-                               pooling_mode_cls_token=False,
-                               pooling_mode_max_tokens=False)
+pooling_model = models.Pooling(
+    word_embedding_model.get_word_embedding_dimension(),
+    pooling_mode_mean_tokens=True,
+    pooling_mode_cls_token=False,
+    pooling_mode_max_tokens=False,
+)
 
 model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 
@@ -85,15 +103,18 @@ gold_samples = []
 dev_samples = []
 test_samples = []
 
-with gzip.open(sts_dataset_path, 'rt', encoding='utf8') as fIn:
-    reader = csv.DictReader(fIn, delimiter='\t', quoting=csv.QUOTE_NONE)
+with gzip.open(sts_dataset_path, "rt", encoding="utf8") as fIn:
+    reader = csv.DictReader(fIn, delimiter="\t", quoting=csv.QUOTE_NONE)
     for row in reader:
-        score = float(row['score']) / 5.0  # Normalize score to range 0 ... 1
-        inp_example = InputExample(texts=[row['sentence1'], row['sentence2']], label=score)
+        score = float(row["score"]) / 5.0  # Normalize score to range 0 ... 1
+        inp_example = InputExample(
+            texts=[row["sentence1"], row["sentence2"]],
+            label=score,
+        )
 
-        if row['split'] == 'dev':
+        if row["split"] == "dev":
             dev_samples.append(inp_example)
-        elif row['split'] == 'test':
+        elif row["split"] == "test":
             test_samples.append(inp_example)
         else:
             gold_samples.append(inp_example)
@@ -119,7 +140,10 @@ logging.info("Starting with synonym replacement...")
 
 #### Synonym replacement using BERT ####
 aug = naw.ContextualWordEmbsAug(
-    model_path=model_name, action="insert", device=device)
+    model_path=model_name,
+    action="insert",
+    device=device,
+)
 
 silver_samples = []
 progress = tqdm.tqdm(unit="docs", total=len(gold_samples))
@@ -133,7 +157,9 @@ for sample in gold_samples:
 progress.reset()
 progress.close()
 logging.info("Textual augmentation completed....")
-logging.info("Number of silver pairs generated: {}".format(len(silver_samples)))
+logging.info(
+    "Number of silver pairs generated: {}".format(len(silver_samples)),
+)
 
 ###################################################################
 #
@@ -142,27 +168,37 @@ logging.info("Number of silver pairs generated: {}".format(len(silver_samples)))
 ###################################################################
 
 logging.info("Read STSbenchmark (gold + silver) training dataset")
-train_dataloader = DataLoader(gold_samples + silver_samples, shuffle=True, batch_size=batch_size)
+train_dataloader = DataLoader(
+    gold_samples + silver_samples,
+    shuffle=True,
+    batch_size=batch_size,
+)
 train_loss = losses.CosineSimilarityLoss(model=model)
 
 
 logging.info("Read STSbenchmark dev dataset")
-evaluator = EmbeddingSimilarityEvaluator.from_input_examples(dev_samples, name='sts-dev')
+evaluator = EmbeddingSimilarityEvaluator.from_input_examples(
+    dev_samples,
+    name="sts-dev",
+)
 
 
 # Configure the training.
-warmup_steps = math.ceil(len(train_dataloader) * num_epochs * 0.1) #10% of train data for warm-up
+warmup_steps = math.ceil(
+    len(train_dataloader) * num_epochs * 0.1,
+)  # 10% of train data for warm-up
 logging.info("Warmup-steps: {}".format(warmup_steps))
 
 
 # Train the SBERT model
-model.fit(train_objectives=[(train_dataloader, train_loss)],
-          evaluator=evaluator,
-          epochs=num_epochs,
-          evaluation_steps=1000,
-          warmup_steps=warmup_steps,
-          output_path=model_save_path
-          )
+model.fit(
+    train_objectives=[(train_dataloader, train_loss)],
+    evaluator=evaluator,
+    epochs=num_epochs,
+    evaluation_steps=1000,
+    warmup_steps=warmup_steps,
+    output_path=model_save_path,
+)
 
 ##########################################################
 #
@@ -171,5 +207,8 @@ model.fit(train_objectives=[(train_dataloader, train_loss)],
 ##########################################################
 
 model = SentenceTransformer(model_save_path)
-test_evaluator = EmbeddingSimilarityEvaluator.from_input_examples(test_samples, name='sts-test')
+test_evaluator = EmbeddingSimilarityEvaluator.from_input_examples(
+    test_samples,
+    name="sts-test",
+)
 test_evaluator(model, output_path=model_save_path)

@@ -19,16 +19,18 @@ import csv
 from tqdm.autonotebook import tqdm
 
 
-source_languages = set(['en'])                                  #Languages our (monolingual) teacher model understands
-target_languages = set(['de', 'es', 'it', 'fr', 'ar', 'tr'])    #New languages we want to extend to
+source_languages = set(
+    ["en"],
+)  # Languages our (monolingual) teacher model understands
+target_languages = set(
+    ["de", "es", "it", "fr", "ar", "tr"],
+)  # New languages we want to extend to
 
 
-dev_sentences = 1000         #Number of sentences we want to use for development
-download_url = "" #Specify TED2020 URL here
-ted2020_path = "../datasets/ted2020.tsv.gz" #Path of the TED2020.tsv.gz file.
+dev_sentences = 1000  # Number of sentences we want to use for development
+download_url = ""  # Specify TED2020 URL here
+ted2020_path = "../datasets/ted2020.tsv.gz"  # Path of the TED2020.tsv.gz file.
 parallel_sentences_folder = "parallel-sentences/"
-
-
 
 
 os.makedirs(os.path.dirname(ted2020_path), exist_ok=True)
@@ -37,45 +39,73 @@ if not os.path.exists(ted2020_path):
     sentence_transformers.util.http_get(download_url, ted2020_path)
 
 
-
 os.makedirs(parallel_sentences_folder, exist_ok=True)
 train_files = []
 dev_files = []
 files_to_create = []
 for source_lang in source_languages:
     for target_lang in target_languages:
-        output_filename_train = os.path.join(parallel_sentences_folder, "TED2020-{}-{}-train.tsv.gz".format(source_lang, target_lang))
-        output_filename_dev = os.path.join(parallel_sentences_folder, "TED2020-{}-{}-dev.tsv.gz".format(source_lang, target_lang))
+        output_filename_train = os.path.join(
+            parallel_sentences_folder,
+            "TED2020-{}-{}-train.tsv.gz".format(source_lang, target_lang),
+        )
+        output_filename_dev = os.path.join(
+            parallel_sentences_folder,
+            "TED2020-{}-{}-dev.tsv.gz".format(source_lang, target_lang),
+        )
         train_files.append(output_filename_train)
         dev_files.append(output_filename_dev)
-        if not os.path.exists(output_filename_train) or not os.path.exists(output_filename_dev):
-            files_to_create.append({'src_lang': source_lang, 'trg_lang': target_lang,
-                                    'fTrain': gzip.open(output_filename_train, 'wt', encoding='utf8'),
-                                    'fDev': gzip.open(output_filename_dev, 'wt', encoding='utf8'),
-                                    'devCount': 0
-                                    })
+        if not os.path.exists(output_filename_train) or not os.path.exists(
+            output_filename_dev,
+        ):
+            files_to_create.append(
+                {
+                    "src_lang": source_lang,
+                    "trg_lang": target_lang,
+                    "fTrain": gzip.open(
+                        output_filename_train,
+                        "wt",
+                        encoding="utf8",
+                    ),
+                    "fDev": gzip.open(
+                        output_filename_dev,
+                        "wt",
+                        encoding="utf8",
+                    ),
+                    "devCount": 0,
+                },
+            )
 
 if len(files_to_create) > 0:
-    print("Parallel sentences files {} do not exist. Create these files now".format(", ".join(map(lambda x: x['src_lang']+"-"+x['trg_lang'], files_to_create))))
-    with gzip.open(ted2020_path, 'rt', encoding='utf8') as fIn:
-        reader = csv.DictReader(fIn, delimiter='\t', quoting=csv.QUOTE_NONE)
+    print(
+        "Parallel sentences files {} do not exist. Create these files now".format(
+            ", ".join(
+                map(
+                    lambda x: x["src_lang"] + "-" + x["trg_lang"],
+                    files_to_create,
+                ),
+            ),
+        ),
+    )
+    with gzip.open(ted2020_path, "rt", encoding="utf8") as fIn:
+        reader = csv.DictReader(fIn, delimiter="\t", quoting=csv.QUOTE_NONE)
         for line in tqdm(reader, desc="Sentences"):
             for outfile in files_to_create:
-                src_text = line[outfile['src_lang']].strip()
-                trg_text = line[outfile['trg_lang']].strip()
+                src_text = line[outfile["src_lang"]].strip()
+                trg_text = line[outfile["trg_lang"]].strip()
 
                 if src_text != "" and trg_text != "":
-                    if outfile['devCount'] < dev_sentences:
-                        outfile['devCount'] += 1
-                        fOut = outfile['fDev']
+                    if outfile["devCount"] < dev_sentences:
+                        outfile["devCount"] += 1
+                        fOut = outfile["fDev"]
                     else:
-                        fOut = outfile['fTrain']
+                        fOut = outfile["fTrain"]
 
                     fOut.write("{}\t{}\n".format(src_text, trg_text))
 
     for outfile in files_to_create:
-        outfile['fTrain'].close()
-        outfile['fDev'].close()
+        outfile["fTrain"].close()
+        outfile["fDev"].close()
 
 
 print("---DONE---")

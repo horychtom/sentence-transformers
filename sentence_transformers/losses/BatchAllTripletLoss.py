@@ -1,7 +1,9 @@
-import torch
 from torch import nn, Tensor
-from typing import Union, Tuple, List, Iterable, Dict
-from .BatchHardTripletLoss import BatchHardTripletLoss, BatchHardTripletLossDistanceFunction
+from typing import Dict, Iterable
+from .BatchHardTripletLoss import (
+    BatchHardTripletLoss,
+    BatchHardTripletLossDistanceFunction,
+)
 from sentence_transformers.SentenceTransformer import SentenceTransformer
 
 
@@ -32,17 +34,27 @@ class BatchAllTripletLoss(nn.Module):
         train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=train_batch_size)
         train_loss = losses.BatchAllTripletLoss(model=model)
     """
-    def __init__(self, model: SentenceTransformer, distance_metric=BatchHardTripletLossDistanceFunction.eucledian_distance, margin: float = 5):
+
+    def __init__(
+        self,
+        model: SentenceTransformer,
+        distance_metric=BatchHardTripletLossDistanceFunction.eucledian_distance,
+        margin: float = 5,
+    ):
         super(BatchAllTripletLoss, self).__init__()
         self.sentence_embedder = model
         self.triplet_margin = margin
         self.distance_metric = distance_metric
 
-    def forward(self, sentence_features: Iterable[Dict[str, Tensor]], labels: Tensor):
-        rep = self.sentence_embedder(sentence_features[0])['sentence_embedding']
+    def forward(
+        self,
+        sentence_features: Iterable[Dict[str, Tensor]],
+        labels: Tensor,
+    ):
+        rep = self.sentence_embedder(sentence_features[0])[
+            "sentence_embedding"
+        ]
         return self.batch_all_triplet_loss(labels, rep)
-
-
 
     def batch_all_triplet_loss(self, labels, embeddings):
         """Build the triplet loss over a batch of embeddings.
@@ -66,7 +78,9 @@ class BatchAllTripletLoss(nn.Module):
         # triplet_loss[i, j, k] will contain the triplet loss of anchor=i, positive=j, negative=k
         # Uses broadcasting where the 1st argument has shape (batch_size, batch_size, 1)
         # and the 2nd (batch_size, 1, batch_size)
-        triplet_loss = anchor_positive_dist - anchor_negative_dist + self.triplet_margin
+        triplet_loss = (
+            anchor_positive_dist - anchor_negative_dist + self.triplet_margin
+        )
 
         # Put to zero the invalid triplets
         # (where label(a) != label(p) or label(n) == label(a) or a == p)
@@ -81,10 +95,9 @@ class BatchAllTripletLoss(nn.Module):
         num_positive_triplets = valid_triplets.size(0)
         num_valid_triplets = mask.sum()
 
-        fraction_positive_triplets = num_positive_triplets / (num_valid_triplets.float() + 1e-16)
+        num_positive_triplets / (num_valid_triplets.float() + 1e-16)
 
         # Get final mean triplet loss over the positive valid triplets
         triplet_loss = triplet_loss.sum() / (num_positive_triplets + 1e-16)
 
         return triplet_loss
-

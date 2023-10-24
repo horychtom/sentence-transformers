@@ -2,7 +2,7 @@
 
 This section shows an example, of how we can train an unsupervised [TSDAE (Transformer-based Denoising AutoEncoder)](https://arxiv.org/abs/2104.06979) model with pure sentences as training data.
 
-## Background 
+## Background
 During training, TSDAE encodes damaged sentences into fixed-sized vectors and requires the decoder to reconstruct the original sentences from these sentence embeddings. For good reconstruction quality, the semantics must be captured well in the sentence embeddings from the encoder. Later, at inference, we only use the encoder for creating sentence embeddings. The architecture is illustrated in the figure below:
 
 ![](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/TSDAE.png)
@@ -22,7 +22,7 @@ model = SentenceTransformer(modules=[word_embedding_model, pooling_model])
 
 # Define a list with sentences (1k - 100k sentences)
 train_sentences = ["Your set of sentences",
-                   "Model will automatically add the noise", 
+                   "Model will automatically add the noise",
                    "And re-construct it",
                    "You should provide at least 1k sentences"]
 
@@ -46,7 +46,7 @@ model.fit(
 )
 
 model.save('output/tsdae-model')
-``` 
+```
 
 ## TSDAE from Sentences File
 
@@ -58,7 +58,7 @@ TSDAE will be training using these sentences. Checkpoints are stored every 500 s
 ## TSDAE on AskUbuntu Dataset
 The [AskUbuntu dataset](https://github.com/taolei87/askubuntu) is a manually annotated dataset for the [AskUbuntu forum](https://askubuntu.com/). For 400 questions, experts annotated for each question 20 other questions if they are related or not. The questions are split into train & development set.
 
-**[train_askubuntu_tsdae.py](train_askubuntu_tsdae.py)** - Shows an example how to train a model on AskUbuntu using only sentences without any labels. As sentences, we use the titles that are not used in the dev / test set. 
+**[train_askubuntu_tsdae.py](train_askubuntu_tsdae.py)** - Shows an example how to train a model on AskUbuntu using only sentences without any labels. As sentences, we use the titles that are not used in the dev / test set.
 
 | Model | MAP-Score on test set |
 | ---- | :----: |
@@ -80,10 +80,10 @@ You first train your model with the TSDAE loss. After you have trained for a cer
 
 ## Citation
 If you use the code for augmented sbert, feel free to cite our publication [TSDAE: Using Transformer-based Sequential Denoising Auto-Encoderfor Unsupervised Sentence Embedding Learning](https://arxiv.org/abs/2104.06979):
-```bibtex 
+```bibtex
 @article{wang-2021-TSDAE,
     title = "TSDAE: Using Transformer-based Sequential Denoising Auto-Encoderfor Unsupervised Sentence Embedding Learning",
-    author = "Wang, Kexin and Reimers, Nils and  Gurevych, Iryna", 
+    author = "Wang, Kexin and Reimers, Nils and  Gurevych, Iryna",
     journal= "arXiv preprint arXiv:2104.06979",
     month = "4",
     year = "2021",

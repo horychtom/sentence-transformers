@@ -16,7 +16,12 @@ which sentence with another label is the closest (hard negative example). It the
 all sentences with the same label should be close and sentences for different labels should be clearly seperated.
 """
 
-from sentence_transformers import SentenceTransformer, LoggingHandler, losses, util
+from sentence_transformers import (
+    SentenceTransformer,
+    LoggingHandler,
+    losses,
+    util,
+)
 from sentence_transformers.datasets import SentenceLabelDataset
 from torch.utils.data import DataLoader
 from sentence_transformers.readers import InputExample
@@ -35,6 +40,7 @@ logging.basicConfig(
     level=logging.INFO,
     handlers=[LoggingHandler()],
 )
+
 
 # Inspired from torchnlp
 def trec_dataset(
@@ -57,17 +63,21 @@ def trec_dataset(
 
         examples = []
         label_map = {}
-        guid=1
+        guid = 1
         for line in open(full_path, "rb"):
             # there is one non-ASCII byte: sisterBADBYTEcity; replaced with space
-            label, _, text = line.replace(b"\xf0", b" ").strip().decode().partition(" ")
+            label, _, text = (
+                line.replace(b"\xf0", b" ").strip().decode().partition(" ")
+            )
 
             if label not in label_map:
                 label_map[label] = len(label_map)
 
             label_id = label_map[label]
             guid += 1
-            examples.append(InputExample(guid=guid, texts=[text], label=label_id))
+            examples.append(
+                InputExample(guid=guid, texts=[text], label=label_id),
+            )
         ret.append(examples)
 
     train_set, test_set = ret
@@ -79,7 +89,7 @@ def trec_dataset(
         train_set = train_set[:-validation_dataset_nb]
 
     # For dev & test set, we return triplets (anchor, positive, negative)
-    random.seed(42) #Fix seed, so that we always get the same triplets
+    random.seed(42)  # Fix seed, so that we always get the same triplets
     dev_triplets = triplets_from_labeled_dataset(dev_set)
     test_triplets = triplets_from_labeled_dataset(test_set)
 
@@ -98,7 +108,9 @@ def triplets_from_labeled_dataset(input_examples):
     for inp_example in input_examples:
         anchor = inp_example
 
-        if len(label2sentence[inp_example.label]) < 2: #We need at least 2 examples per label to create a triplet
+        if (
+            len(label2sentence[inp_example.label]) < 2
+        ):  # We need at least 2 examples per label to create a triplet
             continue
 
         positive = None
@@ -109,14 +121,17 @@ def triplets_from_labeled_dataset(input_examples):
         while negative is None or negative.label == anchor.label:
             negative = random.choice(input_examples)
 
-        triplets.append(InputExample(texts=[anchor.texts[0], positive.texts[0], negative.texts[0]]))
+        triplets.append(
+            InputExample(
+                texts=[anchor.texts[0], positive.texts[0], negative.texts[0]],
+            ),
+        )
 
     return triplets
 
 
-
 # You can specify any huggingface/transformers pre-trained model here, for example, bert-base-uncased, roberta-base, xlm-roberta-base
-model_name = 'all-distilroberta-v1'
+model_name = "all-distilroberta-v1"
 
 ### Create a torch.DataLoader that passes training batch instances to our model
 train_batch_size = 32
@@ -134,7 +149,11 @@ train_set, dev_set, test_set = trec_dataset()
 # We create a special dataset "SentenceLabelDataset" to wrap out train_set
 # It will yield batches that contain at least two samples with the same label
 train_data_sampler = SentenceLabelDataset(train_set)
-train_dataloader = DataLoader(train_data_sampler, batch_size=32, drop_last=True)
+train_dataloader = DataLoader(
+    train_data_sampler,
+    batch_size=32,
+    drop_last=True,
+)
 
 
 # Load pretrained model
@@ -151,18 +170,20 @@ model = SentenceTransformer(model_name)
 #######################################
 
 train_loss = losses.BatchAllTripletLoss(model=model)
-#train_loss = losses.BatchHardTripletLoss(model=model)
-#train_loss = losses.BatchHardSoftMarginTripletLoss(model=model)
-#train_loss = losses.BatchSemiHardTripletLoss(model=model)
+# train_loss = losses.BatchHardTripletLoss(model=model)
+# train_loss = losses.BatchHardSoftMarginTripletLoss(model=model)
+# train_loss = losses.BatchSemiHardTripletLoss(model=model)
 
 
 logging.info("Read TREC val dataset")
-dev_evaluator = TripletEvaluator.from_input_examples(dev_set, name='trec-dev')
+dev_evaluator = TripletEvaluator.from_input_examples(dev_set, name="trec-dev")
 
 logging.info("Performance before fine-tuning:")
 dev_evaluator(model)
 
-warmup_steps = int(len(train_dataloader) * num_epochs  * 0.1)  # 10% of train data
+warmup_steps = int(
+    len(train_dataloader) * num_epochs * 0.1,
+)  # 10% of train data
 
 # Train the model
 model.fit(
@@ -181,5 +202,8 @@ model.fit(
 ##############################################################################
 
 logging.info("Evaluating model on test set")
-test_evaluator = TripletEvaluator.from_input_examples(test_set, name='trec-test')
+test_evaluator = TripletEvaluator.from_input_examples(
+    test_set,
+    name="trec-test",
+)
 model.evaluate(test_evaluator)

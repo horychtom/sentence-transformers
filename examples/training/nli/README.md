@@ -1,6 +1,6 @@
 # Natural Language Inference
 
-Given two sentence (premise and hypothesis), Natural Language Inference (NLI) is the task of deciding if the premise entails the hypothesis, if they are contradiction or if they are neutral. Commonly used NLI dataset are [SNLI](https://arxiv.org/abs/1508.05326) and [MultiNLI](https://arxiv.org/abs/1704.05426). 
+Given two sentence (premise and hypothesis), Natural Language Inference (NLI) is the task of deciding if the premise entails the hypothesis, if they are contradiction or if they are neutral. Commonly used NLI dataset are [SNLI](https://arxiv.org/abs/1508.05326) and [MultiNLI](https://arxiv.org/abs/1704.05426).
 
 [Conneau et al.](https://arxiv.org/abs/1705.02364) showed that NLI data can be quite useful when training Sentence Embedding methods. We also found this in our [Sentence-BERT-Paper](https://arxiv.org/abs/1908.10084) and often use NLI as a first fine-tuning step for sentence embedding methods.
 
@@ -31,7 +31,7 @@ The softmax loss looks like this:
 
 We pass the two sentences through our SentenceTransformer network and get the sentence embeddings *u* and *v*. We then concatenate u, v and |u-v| to form one, long vector. This vector is then passed to a softmax classifier, which predicts our three classes (entailment, neutral, contradiction).
 
-This setup learns sentence embeddings, that can later be used for wide variety of tasks. 
+This setup learns sentence embeddings, that can later be used for wide variety of tasks.
 
 ## MultipleNegativesRankingLoss
 
@@ -51,7 +51,7 @@ Using MultipleNegativeRankingLoss with NLI is rather easy: We define sentences t
 
 ### MultipleNegativesRankingLoss with Hard Negatives
 
-We can further improve MultipleNegativesRankingLoss by not only providing pairs, but by providing triplets: [(a<sub>1</sub>, b<sub>1</sub>, c<sub>1</sub>), ..., (a<sub>n</sub>, b<sub>n</sub>, c<sub>n</sub>)] 
+We can further improve MultipleNegativesRankingLoss by not only providing pairs, but by providing triplets: [(a<sub>1</sub>, b<sub>1</sub>, c<sub>1</sub>), ..., (a<sub>n</sub>, b<sub>n</sub>, c<sub>n</sub>)]
 
 The entry for c<sub>i</sub> are so-called hard-negatives: On a lexical level, they are similar to a<sub>i</sub> and b<sub>i</sub>. But on a semantic level, they mean different things and should not be close in the vector space.
 

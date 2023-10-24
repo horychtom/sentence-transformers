@@ -9,32 +9,40 @@ python train_mlm.py model_name data/train_sentences.txt [data/dev_sentences.txt]
 """
 
 from transformers import AutoModelForMaskedLM, AutoTokenizer
-from transformers import DataCollatorForLanguageModeling, DataCollatorForWholeWordMask
+from transformers import (
+    DataCollatorForLanguageModeling,
+    DataCollatorForWholeWordMask,
+)
 from transformers import Trainer, TrainingArguments
 import sys
 import gzip
 from datetime import datetime
 
 if len(sys.argv) < 3:
-    print("Usage: python train_mlm.py model_name data/train_sentences.txt [data/dev_sentences.txt]")
+    print(
+        "Usage: python train_mlm.py model_name data/train_sentences.txt [data/dev_sentences.txt]",
+    )
     exit()
 
 model_name = sys.argv[1]
 per_device_train_batch_size = 64
 
-save_steps = 1000               #Save model every 1k steps
-num_train_epochs = 3            #Number of epochs
-use_fp16 = False                #Set to True, if your GPU supports FP16 operations
-max_length = 100                #Max length for a text input
-do_whole_word_mask = True       #If set to true, whole words are masked
-mlm_prob = 0.15                 #Probability that a word is replaced by a [MASK] token
+save_steps = 1000  # Save model every 1k steps
+num_train_epochs = 3  # Number of epochs
+use_fp16 = False  # Set to True, if your GPU supports FP16 operations
+max_length = 100  # Max length for a text input
+do_whole_word_mask = True  # If set to true, whole words are masked
+mlm_prob = 0.15  # Probability that a word is replaced by a [MASK] token
 
 # Load the model
 model = AutoModelForMaskedLM.from_pretrained(model_name)
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 
-output_dir = "output/{}-{}".format(model_name.replace("/", "_"),  datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+output_dir = "output/{}-{}".format(
+    model_name.replace("/", "_"),
+    datetime.now().strftime("%Y-%m-%d_%H-%M-%S"),
+)
 print("Save checkpoints to:", output_dir)
 
 
@@ -42,7 +50,9 @@ print("Save checkpoints to:", output_dir)
 
 train_sentences = []
 train_path = sys.argv[2]
-with gzip.open(train_path, 'rt', encoding='utf8') if train_path.endswith('.gz') else  open(train_path, 'r', encoding='utf8') as fIn:
+with gzip.open(train_path, "rt", encoding="utf8") if train_path.endswith(
+    ".gz",
+) else open(train_path, "r", encoding="utf8") as fIn:
     for line in fIn:
         line = line.strip()
         if len(line) >= 10:
@@ -53,7 +63,9 @@ print("Train sentences:", len(train_sentences))
 dev_sentences = []
 if len(sys.argv) >= 4:
     dev_path = sys.argv[3]
-    with gzip.open(dev_path, 'rt', encoding='utf8') if dev_path.endswith('.gz') else open(dev_path, 'r', encoding='utf8') as fIn:
+    with gzip.open(dev_path, "rt", encoding="utf8") if dev_path.endswith(
+        ".gz",
+    ) else open(dev_path, "r", encoding="utf8") as fIn:
         for line in fIn:
             line = line.strip()
             if len(line) >= 10:
@@ -61,9 +73,16 @@ if len(sys.argv) >= 4:
 
 print("Dev sentences:", len(dev_sentences))
 
-#A dataset wrapper, that tokenizes our data on-the-fly
+
+# A dataset wrapper, that tokenizes our data on-the-fly
 class TokenizedSentencesDataset:
-    def __init__(self, sentences, tokenizer, max_length, cache_tokenization=False):
+    def __init__(
+        self,
+        sentences,
+        tokenizer,
+        max_length,
+        cache_tokenization=False,
+    ):
         self.tokenizer = tokenizer
         self.sentences = sentences
         self.max_length = max_length
@@ -71,25 +90,59 @@ class TokenizedSentencesDataset:
 
     def __getitem__(self, item):
         if not self.cache_tokenization:
-            return self.tokenizer(self.sentences[item], add_special_tokens=True, truncation=True, max_length=self.max_length, return_special_tokens_mask=True)
+            return self.tokenizer(
+                self.sentences[item],
+                add_special_tokens=True,
+                truncation=True,
+                max_length=self.max_length,
+                return_special_tokens_mask=True,
+            )
 
         if isinstance(self.sentences[item], str):
-            self.sentences[item] = self.tokenizer(self.sentences[item], add_special_tokens=True, truncation=True, max_length=self.max_length, return_special_tokens_mask=True)
+            self.sentences[item] = self.tokenizer(
+                self.sentences[item],
+                add_special_tokens=True,
+                truncation=True,
+                max_length=self.max_length,
+                return_special_tokens_mask=True,
+            )
         return self.sentences[item]
 
     def __len__(self):
         return len(self.sentences)
 
-train_dataset = TokenizedSentencesDataset(train_sentences, tokenizer, max_length)
-dev_dataset = TokenizedSentencesDataset(dev_sentences, tokenizer, max_length, cache_tokenization=True) if len(dev_sentences) > 0 else None
+
+train_dataset = TokenizedSentencesDataset(
+    train_sentences,
+    tokenizer,
+    max_length,
+)
+dev_dataset = (
+    TokenizedSentencesDataset(
+        dev_sentences,
+        tokenizer,
+        max_length,
+        cache_tokenization=True,
+    )
+    if len(dev_sentences) > 0
+    else None
+)
 
 
 ##### Training arguments
 
 if do_whole_word_mask:
-    data_collator = DataCollatorForWholeWordMask(tokenizer=tokenizer, mlm=True, mlm_probability=mlm_prob)
+    data_collator = DataCollatorForWholeWordMask(
+        tokenizer=tokenizer,
+        mlm=True,
+        mlm_probability=mlm_prob,
+    )
 else:
-    data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=True, mlm_probability=mlm_prob)
+    data_collator = DataCollatorForLanguageModeling(
+        tokenizer=tokenizer,
+        mlm=True,
+        mlm_probability=mlm_prob,
+    )
 
 training_args = TrainingArguments(
     output_dir=output_dir,
@@ -102,7 +155,7 @@ training_args = TrainingArguments(
     logging_steps=save_steps,
     save_total_limit=1,
     prediction_loss_only=True,
-    fp16=use_fp16
+    fp16=use_fp16,
 )
 
 trainer = Trainer(
@@ -110,7 +163,7 @@ trainer = Trainer(
     args=training_args,
     data_collator=data_collator,
     train_dataset=train_dataset,
-    eval_dataset=dev_dataset
+    eval_dataset=dev_dataset,
 )
 
 print("Save tokenizer to:", output_dir)

@@ -11,7 +11,7 @@ query: What is Python?
 passage to retrieve: Python is an interpreted, high-level and general-purpose programming language. Python's design philosophy emphasizes code readability with its notable use of significant whitespace. Its language constructs and object-oriented approach aim to help programmers write clear, logical code for small and large-scale projects.
 ```
 
-We showed how to train such models if sufficient training data (query & relevant passage) is available here: [Training MS MARCO dataset](../../training/ms_marco) 
+We showed how to train such models if sufficient training data (query & relevant passage) is available here: [Training MS MARCO dataset](../../training/ms_marco)
 
 In this tutorial, we show to train such models if  **no training data is available**, i.e., if you don't have thousands of labeled query & relevant passage pairs.
 
@@ -80,10 +80,10 @@ In the above code, we use [Top-p (nucleus) sampling](https://huggingface.co/blog
 ## Bi-Encoder Training
 
 With the generated queries, we can then train a bi-encoder using the use [MultipleNegativesRankingLoss](https://www.sbert.net/docs/package_reference/losses.html#multiplenegativesrankingloss).
- 
+
  ## Full Example
 We train a semantic search model to search through Wikipedia
-articles about programming articles & technologies. 
+articles about programming articles & technologies.
 
 We use the text paragraphs from the following Wikipedia articles:
 Assembly language, C , C# , C++, Go , Java , JavaScript, Keras, Laravel, MATLAB, Matplotlib, MongoDB, MySQL, Natural Language Toolkit, NumPy, pandas (software), Perl, PHP, PostgreSQL, Python , PyTorch, R , React, Rust , Scala , scikit-learn, SciPy, Swift , TensorFlow, Vue.js

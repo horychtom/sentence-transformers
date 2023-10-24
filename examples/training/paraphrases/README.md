@@ -24,7 +24,7 @@ You can find here: [sbert.net/datasets/paraphrases](http://sbert.net/datasets/pa
 | [flickr30k_captions-with-guid.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/flickr30k_captions-with-guid.tsv.gz) | [Flickr 30k](https://shannon.cs.illinois.edu/DenotationGraph/) | 317,695 | 82.04
 | [yahoo_answers_title_question.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/yahoo_answers_title_question.tsv.gz) | [Yahoo Answers Dataset](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset) | 659,896 | 81.19 |
 | [S2ORC_citation_pairs.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/S2ORC_citation_pairs.tsv.gz) | [Semantic Scholar Open Research Corpus](http://s2-public-api-prod.us-west-2.elasticbeanstalk.com/corpus/) | 52,603,982 | 81.02 |
-| [yahoo_answers_title_answer.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/yahoo_answerstitle_answer.tsv.gz) | [Yahoo Answers Dataset](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset)  | 1,198,260 | 80.25 
+| [yahoo_answers_title_answer.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/yahoo_answerstitle_answer.tsv.gz) | [Yahoo Answers Dataset](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset)  | 1,198,260 | 80.25
 | [stackexchange_duplicate_questions.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/stackexchange_duplicate_questions.tsv.gz) | [Stackexchange](https://stackexchange.com/) | 169,438 | 80.37
 | [yahoo_answers_question_answer.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/yahoo_answers_question_answer.tsv.gz) | [Yahoo Answers Dataset](https://www.kaggle.com/soumikrakshit/yahoo-answers-dataset)  | 681,164 | 79.88 |
 | [wiki-atomic-edits.tsv.gz](https://public.ukp.informatik.tu-darmstadt.de/reimers/sentence-transformers/datasets/paraphrases/wiki-atomic-edits.tsv.gz) | [wiki-atomic-edits](https://github.com/google-research-datasets/wiki-atomic-edits) |   22,980,185  | 79.58
@@ -36,7 +36,7 @@ See the respective linked source website for the dataset license.
 
 All datasets have a sample per line and the individual sentences are separated by a tab (\t). Some datasets (like AllNLI) has three sentences per line: An anchor, a positive, and a hard negative.
 
-We measure for each dataset the performance on the STSb development dataset after 2k training steps with a distilroberta-base model and a batch size of 256. 
+We measure for each dataset the performance on the STSb development dataset after 2k training steps with a distilroberta-base model and a batch size of 256.
 
 **Note**: We find that the STSb dataset is a suboptimal dataset to evaluate the quality of sentence embedding models. It consists mainly of rather simple sentences, it does not require any domain specific knowledge, and the included sentences are of rather high quality compared to noisy, user-written content. Please do not infer from the above numbers how the approaches will perform on your domain specific dataset.
 

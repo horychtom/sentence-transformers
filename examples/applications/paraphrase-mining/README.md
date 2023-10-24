@@ -1,6 +1,6 @@
 # Paraphrase Mining
 
-Paraphrase mining is the task of finding paraphrases (texts with identical / similar meaning) in a large corpus of sentences. In [Semantic Textual Similarity](../../../docs/usage/semantic_textual_similarity.md) we saw a simplified version of finding paraphrases in a list of sentences. The approach presented there used a brute-force approach to score and rank all pairs. 
+Paraphrase mining is the task of finding paraphrases (texts with identical / similar meaning) in a large corpus of sentences. In [Semantic Textual Similarity](../../../docs/usage/semantic_textual_similarity.md) we saw a simplified version of finding paraphrases in a list of sentences. The approach presented there used a brute-force approach to score and rank all pairs.
 
 However, as this has a quadratic runtime, it fails to scale to large (10,000 and more) collections of sentences.
 
@@ -49,4 +49,3 @@ paraphrases = util.paraphrase_mining(model, sentences, corpus_chunk_size=len(sen
 You will get for each sentence only the one most other relevant sentence. Note, if B is the most similar sentence for A, A must not be the most similar sentence for B. So it can happen that the returned list contains entries like (A, B) and (B, C).
 
 The final relevant parameter is *max_pairs*, which determines the maximum number of paraphrase pairs you like to get returned. If you set it to e.g. *max_pairs=100*, you will not get more than 100 paraphrase pairs returned. Usually, you get fewer pairs returned as the list is cleaned of duplicates, e.g., if it contains (A, B) and (B, A), then only one is returned.
- 

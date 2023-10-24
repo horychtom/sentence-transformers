@@ -1,11 +1,12 @@
 import torch
 from torch import nn, Tensor
-from typing import Union, Tuple, List, Iterable, Dict, Callable
+from typing import Callable, Dict, Iterable
 from ..SentenceTransformer import SentenceTransformer
 import logging
 
 
 logger = logging.getLogger(__name__)
+
 
 class SoftmaxLoss(nn.Module):
     """
@@ -32,20 +33,25 @@ class SoftmaxLoss(nn.Module):
         train_dataloader = DataLoader(train_dataset, shuffle=True, batch_size=train_batch_size)
         train_loss = losses.SoftmaxLoss(model=model, sentence_embedding_dimension=model.get_sentence_embedding_dimension(), num_labels=train_num_labels)
     """
-    def __init__(self,
-                 model: SentenceTransformer,
-                 sentence_embedding_dimension: int,
-                 num_labels: int,
-                 concatenation_sent_rep: bool = True,
-                 concatenation_sent_difference: bool = True,
-                 concatenation_sent_multiplication: bool = False,
-                 loss_fct: Callable = nn.CrossEntropyLoss()):
+
+    def __init__(
+        self,
+        model: SentenceTransformer,
+        sentence_embedding_dimension: int,
+        num_labels: int,
+        concatenation_sent_rep: bool = True,
+        concatenation_sent_difference: bool = True,
+        concatenation_sent_multiplication: bool = False,
+        loss_fct: Callable = nn.CrossEntropyLoss(),
+    ):
         super(SoftmaxLoss, self).__init__()
         self.model = model
         self.num_labels = num_labels
         self.concatenation_sent_rep = concatenation_sent_rep
         self.concatenation_sent_difference = concatenation_sent_difference
-        self.concatenation_sent_multiplication = concatenation_sent_multiplication
+        self.concatenation_sent_multiplication = (
+            concatenation_sent_multiplication
+        )
 
         num_vectors_concatenated = 0
         if concatenation_sent_rep:
@@ -54,12 +60,26 @@ class SoftmaxLoss(nn.Module):
             num_vectors_concatenated += 1
         if concatenation_sent_multiplication:
             num_vectors_concatenated += 1
-        logger.info("Softmax loss: #Vectors concatenated: {}".format(num_vectors_concatenated))
-        self.classifier = nn.Linear(num_vectors_concatenated * sentence_embedding_dimension, num_labels)
+        logger.info(
+            "Softmax loss: #Vectors concatenated: {}".format(
+                num_vectors_concatenated,
+            ),
+        )
+        self.classifier = nn.Linear(
+            num_vectors_concatenated * sentence_embedding_dimension,
+            num_labels,
+        )
         self.loss_fct = loss_fct
 
-    def forward(self, sentence_features: Iterable[Dict[str, Tensor]], labels: Tensor):
-        reps = [self.model(sentence_feature)['sentence_embedding'] for sentence_feature in sentence_features]
+    def forward(
+        self,
+        sentence_features: Iterable[Dict[str, Tensor]],
+        labels: Tensor,
+    ):
+        reps = [
+            self.model(sentence_feature)["sentence_embedding"]
+            for sentence_feature in sentence_features
+        ]
         rep_a, rep_b = reps
 
         vectors_concat = []

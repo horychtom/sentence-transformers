@@ -9,7 +9,7 @@ model = SentenceTransformer('all-MiniLM-L6-v2')
 
 #Our sentences we like to encode
 sentences = ['This framework generates embeddings for each input sentence',
-    'Sentences are passed as a list of strings.', 
+    'Sentences are passed as a list of strings.',
     'The quick brown fox jumps over the lazy dog.']
 
 #Sentences are encoded by calling model.encode()
@@ -38,7 +38,7 @@ model = SentenceTransformer('model_name_or_path', device='cuda')
 ```
 
 With *device* any pytorch device (like CPU, cuda, cuda:0 etc.)
- 
+
 
 The relevant method to encode a set of sentences / texts is `model.encode()`. In the following, you can find parameters this method accepts. Some relevant parameters are *batch_size* (depending on your GPU a different batch size is optimal) as well as *convert_to_numpy* (returns a numpy matrix)  and *convert_to_tensor* (returns a pytorch tensor).
 
@@ -51,7 +51,7 @@ The relevant method to encode a set of sentences / texts is `model.encode()`. In
 Transformer models like BERT / RoBERTa / DistilBERT etc. the runtime and the memory requirement grows quadratic with the input length. This limits transformers to inputs of certain lengths. A common value for BERT & Co. are 512 word pieces, which corresponds to about 300-400 words (for English). Longer texts than this are truncated to the first x word pieces.
 
 By default, the provided methods use a limit of 128 word pieces, longer inputs will be truncated. You can get and set the maximal sequence length like this:
- 
+
 ```python
 from sentence_transformers import SentenceTransformer
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -67,7 +67,7 @@ print("Max Sequence Length:", model.max_seq_length)
 **Note:** You cannot increase the length higher than what is maximally supported by the respective transformer model. Also note that if a model was trained on short texts, the representations for long texts might not be that good.
 
 ## Storing & Loading Embeddings
-The easiest method is to use *pickle* to store pre-computed embeddings on disc and to load it from disc. This can especially be useful if you need to encode large set of sentences. 
+The easiest method is to use *pickle* to store pre-computed embeddings on disc and to load it from disc. This can especially be useful if you need to encode large set of sentences.
 
 
 ```python
@@ -76,7 +76,7 @@ import pickle
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 sentences = ['This framework generates embeddings for each input sentence',
-    'Sentences are passed as a list of string.', 
+    'Sentences are passed as a list of string.',
     'The quick brown fox jumps over the lazy dog.']
 
 
@@ -146,5 +146,3 @@ You can find the available models here: [https://huggingface.co/sentence-transfo
 
 
 In the above example we add mean pooling on top of the AutoModel (which will load a BERT model). We also have models with max-pooling and where we use the CLS token. How to apply this pooling correctly, have a look at [sentence-transformers/bert-base-nli-max-tokens](https://huggingface.co/sentence-transformers/bert-base-nli-max-tokens) and [/sentence-transformers/bert-base-nli-cls-token](https://huggingface.co/sentence-transformers/bert-base-nli-cls-token).
-
-

@@ -10,6 +10,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def degree_centrality_scores(
     similarity_matrix,
     threshold=None,
@@ -21,8 +22,8 @@ def degree_centrality_scores(
         and 0 <= threshold < 1
     ):
         raise ValueError(
-            '\'threshold\' should be a floating-point number '
-            'from the interval [0, 1) or None',
+            "'threshold' should be a floating-point number "
+            "from the interval [0, 1) or None",
         )
 
     if threshold is None:
@@ -62,7 +63,9 @@ def _power_method(transition_matrix, increase_power=True, max_iter=10000):
         if increase_power:
             transition = np.dot(transition, transition)
 
-    logger.warning("Maximum number of iterations for power method exceeded without convergence!")
+    logger.warning(
+        "Maximum number of iterations for power method exceeded without convergence!",
+    )
     return eigenvector_next
 
 
@@ -81,7 +84,7 @@ def connected_nodes(matrix):
 def create_markov_matrix(weights_matrix):
     n_1, n_2 = weights_matrix.shape
     if n_1 != n_2:
-        raise ValueError('\'weights_matrix\' should be square')
+        raise ValueError("'weights_matrix' should be square")
 
     row_sum = weights_matrix.sum(axis=1, keepdims=True)
 
@@ -107,7 +110,7 @@ def stationary_distribution(
 ):
     n_1, n_2 = transition_matrix.shape
     if n_1 != n_2:
-        raise ValueError('\'transition_matrix\' should be square')
+        raise ValueError("'transition_matrix' should be square")
 
     distribution = np.zeros(n_1)
 

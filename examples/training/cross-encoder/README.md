@@ -45,6 +45,3 @@ model.fit(train_dataloader=train_dataloader,
           warmup_steps=warmup_steps,
           output_path=model_save_path)
 ```
-
-
-

@@ -3,7 +3,7 @@
 ## Motivation
 
 Bi-encoders (a.k.a. sentence embeddings models) require substantial training data and fine-tuning over the target task to achieve competitive performances. However, in many scenarios, there is only little training data available.
- 
+
  To solve this practical issue, we release an effective data-augmentation strategy known as <b>Augmented SBERT</b> where we utilize a high performing and slow cross-encoder (BERT) to label a larger set of input pairs to augment the training data for the bi-encoder (SBERT).
 
 For more details, refer to our publication - [Augmented SBERT: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks](https://arxiv.org/abs/2010.08240) which is a joint effort by Nandan Thakur, Nils Reimers and Johannes Daxenberger of UKP Lab, TU Darmstadt.
@@ -19,12 +19,12 @@ If you have specialized datasets in your company or research which are small-siz
 If you have specialized datasets in your company or research which only contain unlabeled sentence-pairs. You can extend the idea of Augmented SBERT (domain-transfer) strategy by training a cross-encoder over a source dataset which is annotated (for eg. QQP). Use this cross-encoder to label your specialised unlabeled dataset i.e. target dataset. Finally train a bi-encoder i.e. SBERT over your labeled target dataset as shown in [train_sts_qqp_crossdomain.py](train_sts_qqp_crossdomain.py).
 
 
-## Methodology 
-There are two major scenarios for the Augmented SBERT approach for pairwise-sentence regression or classification tasks. 
+## Methodology
+There are two major scenarios for the Augmented SBERT approach for pairwise-sentence regression or classification tasks.
 
 ## Scenario 1: Limited or small annotated datasets (few labeled sentence-pairs)
 
-We apply the Augmented SBERT (<b>In-domain</b>) strategy, it involves three steps - 
+We apply the Augmented SBERT (<b>In-domain</b>) strategy, it involves three steps -
 
  - Step 1:  Train a cross-encoder (BERT) over the small (gold or annotated) dataset
 
@@ -38,7 +38,7 @@ We apply the Augmented SBERT (<b>In-domain</b>) strategy, it involves three step
 
 ## Scenario 2: No annotated datasets (Only unlabeled sentence-pairs)
 
-We apply the Augmented SBERT (<b>Domain-Transfer</b>) strategy, it involves three steps - 
+We apply the Augmented SBERT (<b>Domain-Transfer</b>) strategy, it involves three steps -
 
  - Step 1: Train from scratch a cross-encoder (BERT) over a source dataset, for which we contain annotations
 
@@ -50,20 +50,20 @@ We apply the Augmented SBERT (<b>Domain-Transfer</b>) strategy, it involves thre
 
 
 ## Training
- 
+
 The [examples/training/data_augmentation](https://github.com/UKPLab/sentence-transformers/blob/master/examples/training/data_augmentation/) folder contains simple training examples for each scenario explained below:
 
-- [train_sts_seed_optimization.py](train_sts_seed_optimization.py) 
-    - This script trains a bi-encoder (SBERT) model from scratch for STS benchmark dataset with seed-optimization. 
-    - Seed optimization technique is inspired from [(Dodge et al., 2020)](https://arxiv.org/abs/2002.06305). 
-    - For Seed opt., we train our bi-encoder for various seeds and evaluate using an early stopping algorithm. 
+- [train_sts_seed_optimization.py](train_sts_seed_optimization.py)
+    - This script trains a bi-encoder (SBERT) model from scratch for STS benchmark dataset with seed-optimization.
+    - Seed optimization technique is inspired from [(Dodge et al., 2020)](https://arxiv.org/abs/2002.06305).
+    - For Seed opt., we train our bi-encoder for various seeds and evaluate using an early stopping algorithm.
     - Finally, measure dev performance across the seeds to get the highest performing seeds.
 
 - [train_sts_indomain_nlpaug.py](train_sts_indomain_nlpaug.py)
-    - This script trains a bi-encoder (SBERT) model from scratch for STS benchmark dataset using easy data augmentation. 
+    - This script trains a bi-encoder (SBERT) model from scratch for STS benchmark dataset using easy data augmentation.
     - Data augmentation strategies are used from popular [nlpaug](https://github.com/makcedward/nlpaug) package.
     - Augment single sentences with synonyms using (word2vec, BERT or WordNet). Forms our silver dataset.
-    - Train bi-encoder model on both original small training dataset and synonym based silver dataset. 
+    - Train bi-encoder model on both original small training dataset and synonym based silver dataset.
 
 - [train_sts_indomain_bm25.py](train_sts_indomain_bm25.py)
     - Script initially trains a cross-encoder (BERT) model from scratch for small STS benchmark dataset.
@@ -88,10 +88,10 @@ The [examples/training/data_augmentation](https://github.com/UKPLab/sentence-tra
 
 ## Citation
 If you use the code for augmented sbert, feel free to cite our publication [Augmented SBERT: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks](https://arxiv.org/abs/2010.08240):
-``` 
+```
 @article{thakur-2020-AugSBERT,
     title = "Augmented SBERT: Data Augmentation Method for Improving Bi-Encoders for Pairwise Sentence Scoring Tasks",
-    author = "Thakur, Nandan and Reimers, Nils and Daxenberger, Johannes and  Gurevych, Iryna", 
+    author = "Thakur, Nandan and Reimers, Nils and Daxenberger, Johannes and  Gurevych, Iryna",
     journal= "arXiv preprint arXiv:2010.08240",
     month = "10",
     year = "2020",

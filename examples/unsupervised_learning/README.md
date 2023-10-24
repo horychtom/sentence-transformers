@@ -16,7 +16,7 @@ See **[TSDAE](TSDAE/README.md)** for more information and training examples.
 
 ## SimCSE
 
-Gao et al. present in [SimCSE: Simple Contrastive Learning of Sentence Embeddings](https://arxiv.org/abs/2104.08821) a method that passes the same sentence twice to the sentence embedding encoder. Due to the drop-out, it will be encoded at slightly different positions in vector space. 
+Gao et al. present in [SimCSE: Simple Contrastive Learning of Sentence Embeddings](https://arxiv.org/abs/2104.08821) a method that passes the same sentence twice to the sentence embedding encoder. Due to the drop-out, it will be encoded at slightly different positions in vector space.
 
 The distance between these two embeddings will be minimized, while the distance to other embeddings of the other sentences in the same batch will be maximized.
 
@@ -49,19 +49,16 @@ We pass all passages in our collection through a trained T5 model, which generat
 
 ![Query Generation](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/query-generation.png)
 
-See **[GenQ](query_generation/README.md)** for more information and training examples. See **[GPL](../domain_adaptation/README.md)** for the improved version that uses a multi-step training approach. 
+See **[GenQ](query_generation/README.md)** for more information and training examples. See **[GPL](../domain_adaptation/README.md)** for the improved version that uses a multi-step training approach.
 
 ## GPL
 
 In [GPL: Generative Pseudo Labeling for Unsupervised Domain Adaptation of Dense Retrieval](https://arxiv.org/abs/2112.07577) we show an improved version of GenQ, which combines the generation with negative mining and pseudo labeling using a Cross-Encoder. It leads to significantly improved results. See **[Domain Adaptation](../domain_adaptation/README.md)** for more information.
 
-![GPL Architecture](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/gpl_architecture.png) 
+![GPL Architecture](https://raw.githubusercontent.com/UKPLab/sentence-transformers/master/docs/img/gpl_architecture.png)
 
 
 ## Performance Comparison
 
-In our paper 
+In our paper
 [TSDAE](https://arxiv.org/abs/2104.06979) we compare approaches for sentence embedding tasks, and in [GPL](https://arxiv.org/abs/2112.07577) we compare them for semantic search tasks (given a query, find relevant passages). While the unsupervised approach achieve acceptable performances for sentence embedding tasks, they perform poorly for semantic search tasks.
-
-
-
