@@ -12,3 +12,4 @@ huggingface-hub
 peft
 bitsandbytes
 wandb
+python-dotenv
