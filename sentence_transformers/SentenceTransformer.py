@@ -19,6 +19,7 @@ import math
 import queue
 import tempfile
 from distutils.dir_util import copy_tree
+from sentence_transformers.wandb_.wandb_client import WandbClient
 
 from . import __MODEL_HUB_ORGANIZATION__
 from .evaluation import SentenceEvaluator
@@ -53,10 +54,12 @@ class SentenceTransformer(nn.Sequential):
         device: Optional[str] = None,
         cache_folder: Optional[str] = None,
         use_auth_token: Union[bool, str, None] = None,
+        wandbc: WandbClient = None
     ):
         self._model_card_vars = {}
         self._model_card_text = None
         self._model_config = {}
+        self.wandbc = wandbc
 
         if cache_folder is None:
             cache_folder = os.getenv("SENTENCE_TRANSFORMERS_HOME")
@@ -1081,6 +1084,8 @@ class SentenceTransformer(nn.Sequential):
                         optimizer.step()
 
                     optimizer.zero_grad()
+                    self.wandbc.run.log({'train_loss':loss_value.item()})
+
 
                     if not skip_scheduler:
                         scheduler.step()

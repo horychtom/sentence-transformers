@@ -1,1 +1,1 @@
-# Triplet losses
+from .MultipleNegativesRankingLoss import MultipleNegativesRankingLoss
