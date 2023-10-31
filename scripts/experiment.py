@@ -42,10 +42,10 @@ evaluator = MultipleNegativesRankingLossEvaluator(dev_dataloader)
 training_args = {
     "epochs": 1,
     "scheduler": "WarmupLinear",
-    "warmup_steps": 1000,
+    "warmup_steps": 500,
     "evaluator": evaluator,
-    "evaluation_steps": 3,
-    "checkpoint_save_steps": 3,
+    "evaluation_steps": 200,
+    "checkpoint_save_steps": 200,
     "checkpoint_save_total_limit": 3,
 }
 
