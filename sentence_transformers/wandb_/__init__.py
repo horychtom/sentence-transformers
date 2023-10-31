@@ -3,6 +3,7 @@ from config import WANDB_API_KEY
 from config import HF_TOKEN
 import wandb
 import huggingface_hub
+from .wandb_client import WandbClient
 
 wandb.login(key=WANDB_API_KEY)
 huggingface_hub.login(HF_TOKEN)

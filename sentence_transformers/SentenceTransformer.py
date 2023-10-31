@@ -54,7 +54,7 @@ class SentenceTransformer(nn.Sequential):
         device: Optional[str] = None,
         cache_folder: Optional[str] = None,
         use_auth_token: Union[bool, str, None] = None,
-        wandbc: WandbClient = None
+        wandbc: WandbClient = None,
     ):
         self._model_card_vars = {}
         self._model_card_text = None
@@ -1084,8 +1084,7 @@ class SentenceTransformer(nn.Sequential):
                         optimizer.step()
 
                     optimizer.zero_grad()
-                    self.wandbc.run.log({'train_loss':loss_value.item()})
-
+                    self.wandbc.run.log({"train_loss": loss_value.item()})
 
                     if not skip_scheduler:
                         scheduler.step()
