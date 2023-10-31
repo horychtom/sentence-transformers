@@ -55,13 +55,11 @@ class SentenceTransformer(nn.Sequential):
         cache_folder: Optional[str] = None,
         use_auth_token: Union[bool, str, None] = None,
         wandbc: WandbClient = None,
-        max_seq_length=512,
     ):
         self._model_card_vars = {}
         self._model_card_text = None
         self._model_config = {}
         self.wandbc = wandbc
-        self.max_seq_length = max_seq_length
 
         if cache_folder is None:
             cache_folder = os.getenv("SENTENCE_TRANSFORMERS_HOME")
@@ -1229,8 +1227,7 @@ class SentenceTransformer(nn.Sequential):
             ),
         )
         transformer_model = Transformer(
-            model_name_or_path,
-            max_seq_length=self.max_seq_length,
+            model_name_or_path, max_seq_length=512
         )
         pooling_model = Pooling(
             transformer_model.get_word_embedding_dimension(),

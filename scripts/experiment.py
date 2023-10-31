@@ -21,8 +21,8 @@ wandbc = WandbClient(run_name=run_name)
 model = SentenceTransformer(model_name, wandbc=wandbc)
 
 # load datasets from wandb
-train_dataset = pd.read_csv(wandbc.load_dataset("zbmath_train"))[:200]
-dev_dataset = pd.read_csv(wandbc.load_dataset("zbmath_dev"))[:4]
+train_dataset = pd.read_csv(wandbc.load_dataset("zbmath_train"))
+dev_dataset = pd.read_csv(wandbc.load_dataset("zbmath_dev"))
 
 train_examples = []
 dev_examples = []
