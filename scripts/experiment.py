@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 # Load the dataset
-model_name = "bert-base-uncased"
+model_name = "roberta-base"
 run_name = model_name.split("/")[-1] + "-fine-tuning"
 wandbc = WandbClient(run_name=run_name)
 

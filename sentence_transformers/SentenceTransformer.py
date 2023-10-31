@@ -55,11 +55,13 @@ class SentenceTransformer(nn.Sequential):
         cache_folder: Optional[str] = None,
         use_auth_token: Union[bool, str, None] = None,
         wandbc: WandbClient = None,
+        max_seq_length=512,
     ):
         self._model_card_vars = {}
         self._model_card_text = None
         self._model_config = {}
         self.wandbc = wandbc
+        self.max_seq_length = max_seq_length
 
         if cache_folder is None:
             cache_folder = os.getenv("SENTENCE_TRANSFORMERS_HOME")
@@ -1178,6 +1180,7 @@ class SentenceTransformer(nn.Sequential):
                 epoch=epoch,
                 steps=steps,
             )
+            self.wandbc.log({"dev_loss": score})
             if callback is not None:
                 callback(score, epoch, steps)
             if score > self.best_score:
@@ -1225,7 +1228,10 @@ class SentenceTransformer(nn.Sequential):
                 model_name_or_path,
             ),
         )
-        transformer_model = Transformer(model_name_or_path)
+        transformer_model = Transformer(
+            model_name_or_path,
+            max_seq_length=self.max_seq_length,
+        )
         pooling_model = Pooling(
             transformer_model.get_word_embedding_dimension(),
             "mean",

@@ -207,8 +207,8 @@ class Transformer(nn.Module):
         output.update(
             self.tokenizer(
                 *to_tokenize,
-                padding=True,
-                truncation="longest_first",
+                padding="max_length",
+                truncation=True,
                 return_tensors="pt",
                 max_length=self.max_seq_length,
             ),
