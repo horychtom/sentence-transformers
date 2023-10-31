@@ -3,7 +3,7 @@ from scipy.stats import pearsonr, spearmanr
 from typing import List
 import os
 import csv
-from ... import InputExample
+from sentence_transformers.readers import InputExample
 
 
 logger = logging.getLogger(__name__)

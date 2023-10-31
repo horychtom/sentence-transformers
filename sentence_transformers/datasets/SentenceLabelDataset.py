@@ -4,7 +4,7 @@
 from torch.utils.data import IterableDataset
 import numpy as np
 from typing import List
-from ..readers import InputExample
+from sentence_transformers.readers import InputExample
 import logging
 
 logger = logging.getLogger(__name__)

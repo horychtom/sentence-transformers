@@ -4,7 +4,7 @@ from .BatchHardTripletLoss import (
     BatchHardTripletLoss,
     BatchHardTripletLossDistanceFunction,
 )
-from sentence_transformers.SentenceTransformer import SentenceTransformer
+from sentence_transformers import SentenceTransformer
 
 
 class BatchAllTripletLoss(nn.Module):

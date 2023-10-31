@@ -1,4 +1,4 @@
-from . import SentenceEvaluator
+from sentence_transformers.evaluation import SentenceEvaluator
 import torch
 from torch import Tensor
 import logging

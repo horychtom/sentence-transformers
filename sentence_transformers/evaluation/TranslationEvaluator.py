@@ -1,6 +1,6 @@
-from . import SentenceEvaluator
+from sentence_transformers.evaluation import SentenceEvaluator
 import logging
-from ..util import pytorch_cos_sim
+from sentence_transformers.util import pytorch_cos_sim
 import os
 import csv
 import numpy as np

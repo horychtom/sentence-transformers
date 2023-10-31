@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset
 from typing import List
-from ..readers.InputExample import InputExample
+from sentence_transformers.readers import InputExample
 import numpy as np
 import nltk
 from nltk.tokenize.treebank import TreebankWordDetokenizer

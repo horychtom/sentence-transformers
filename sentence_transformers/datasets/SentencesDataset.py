@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset
 from typing import List
-from .. import SentenceTransformer
-from ..readers.InputExample import InputExample
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.readers import InputExample
 
 
 class SentencesDataset(Dataset):

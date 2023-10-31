@@ -5,8 +5,8 @@ import numpy as np
 import os
 import csv
 
-from ... import InputExample
-from ...evaluation import BinaryClassificationEvaluator
+from sentence_transformers.readers import InputExample
+from sentence_transformers.evaluation import BinaryClassificationEvaluator
 
 
 logger = logging.getLogger(__name__)

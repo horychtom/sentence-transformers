@@ -12,8 +12,8 @@ from torch import nn
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm, trange
-from .. import SentenceTransformer, util
-from ..evaluation import SentenceEvaluator
+from sentence_transformers import SentenceTransformer, util
+from sentence_transformers.evaluation import SentenceEvaluator
 
 
 logger = logging.getLogger(__name__)

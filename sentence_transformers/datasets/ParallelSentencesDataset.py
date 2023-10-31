@@ -1,8 +1,8 @@
 from torch.utils.data import Dataset
 import logging
 import gzip
-from .. import SentenceTransformer
-from ..readers import InputExample
+from sentence_transformers import SentenceTransformer
+from sentence_transformers.readers import InputExample
 from typing import List
 import random
 

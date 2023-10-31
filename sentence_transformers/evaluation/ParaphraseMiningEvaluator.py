@@ -1,4 +1,4 @@
-from . import SentenceEvaluator
+from sentence_transformers.evaluation import SentenceEvaluator
 import logging
 from sentence_transformers.util import paraphrase_mining
 import os

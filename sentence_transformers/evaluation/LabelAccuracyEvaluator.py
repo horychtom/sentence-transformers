@@ -1,8 +1,8 @@
-from . import SentenceEvaluator
+from sentence_transformers.evaluation import SentenceEvaluator
 import torch
 from torch.utils.data import DataLoader
 import logging
-from ..util import batch_to_device
+from sentence_transformers.util import batch_to_device
 import os
 import csv
 

@@ -2,7 +2,7 @@ import torch
 from torch import nn, Tensor
 from typing import Dict, Iterable
 from sentence_transformers import util
-from sentence_transformers.SentenceTransformer import SentenceTransformer
+from sentence_transformers import SentenceTransformer
 
 
 class BatchHardTripletLossDistanceFunction:

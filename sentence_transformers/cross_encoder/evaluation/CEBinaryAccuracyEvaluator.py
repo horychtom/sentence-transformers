@@ -2,7 +2,7 @@ import logging
 import os
 import csv
 from typing import List
-from ... import InputExample
+from sentence_transformers.readers import InputExample
 import numpy as np
 
 

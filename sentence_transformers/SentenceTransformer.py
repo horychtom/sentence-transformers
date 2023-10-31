@@ -19,7 +19,7 @@ import math
 import queue
 import tempfile
 from distutils.dir_util import copy_tree
-from sentence_transformers.wandb_.wandb_client import WandbClient
+from sentence_transformers.wandb_ import WandbClient
 
 from . import __MODEL_HUB_ORGANIZATION__
 from .evaluation import SentenceEvaluator

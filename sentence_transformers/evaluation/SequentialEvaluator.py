@@ -1,4 +1,4 @@
-from . import SentenceEvaluator
+from sentence_transformers.evaluation import SentenceEvaluator
 from typing import Iterable
 
 

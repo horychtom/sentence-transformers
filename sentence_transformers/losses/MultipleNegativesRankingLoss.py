@@ -1,8 +1,7 @@
 import torch
 from torch import nn, Tensor
 from typing import Iterable, Dict
-from ..SentenceTransformer import SentenceTransformer
-from .. import util
+from sentence_transformers import SentenceTransformer, util
 
 
 class MultipleNegativesRankingLoss(nn.Module):

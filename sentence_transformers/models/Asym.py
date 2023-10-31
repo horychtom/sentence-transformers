@@ -3,7 +3,7 @@ from torch import nn
 from typing import List, Dict
 import os
 import json
-from ..util import import_from_string
+from sentence_transformers.util import import_from_string
 from collections import OrderedDict
 from typing import Dict, List, Tuple, Union
 

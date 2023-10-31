@@ -1,12 +1,12 @@
 import torch
 from torch import nn, Tensor
 from typing import Iterable, Dict
-from ..SentenceTransformer import SentenceTransformer
-from .. import util
+from sentence_transformers import SentenceTransformer
+from sentence_transformers import util
 import copy
 import random
 import math
-from .. import InputExample
+from sentence_transformers.readers import InputExample
 import numpy as np
 
 

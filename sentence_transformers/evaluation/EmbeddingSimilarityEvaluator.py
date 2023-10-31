@@ -1,4 +1,4 @@
-from . import SentenceEvaluator, SimilarityFunction
+from sentence_transformers.evaluation import SentenceEvaluator, SimilarityFunction
 import logging
 import os
 import csv

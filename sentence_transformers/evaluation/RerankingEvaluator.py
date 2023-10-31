@@ -1,9 +1,9 @@
-from . import SentenceEvaluator
+from sentence_transformers.evaluation import SentenceEvaluator
 import logging
 import numpy as np
 import os
 import csv
-from ..util import cos_sim
+from sentence_transformers.util import cos_sim
 import torch
 from sklearn.metrics import average_precision_score
 import tqdm
