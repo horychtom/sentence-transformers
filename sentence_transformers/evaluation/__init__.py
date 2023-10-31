@@ -9,5 +9,5 @@ from .MSEEvaluator import MSEEvaluator
 from .MSEEvaluatorFromDataFrame import MSEEvaluatorFromDataFrame
 from .ParaphraseMiningEvaluator import ParaphraseMiningEvaluator
 from .RerankingEvaluator import RerankingEvaluator
-from .TranslationEvaluator import TranslationEvaluator
 from .TripletEvaluator import TripletEvaluator
+from .MultipleNegativesRankingLossEvaluator import MultipleNegativesRankingLossEvaluator

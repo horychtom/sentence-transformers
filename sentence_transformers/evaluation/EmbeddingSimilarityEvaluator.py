@@ -1,4 +1,7 @@
-from sentence_transformers.evaluation import SentenceEvaluator, SimilarityFunction
+from sentence_transformers.evaluation import (
+    SentenceEvaluator,
+    SimilarityFunction,
+)
 import logging
 import os
 import csv
@@ -10,7 +13,7 @@ from sklearn.metrics.pairwise import (
 from scipy.stats import pearsonr, spearmanr
 import numpy as np
 from typing import List
-from ..readers import InputExample
+from sentence_transformers.readers import InputExample
 
 
 logger = logging.getLogger(__name__)

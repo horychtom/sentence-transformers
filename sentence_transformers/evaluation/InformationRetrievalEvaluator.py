@@ -3,7 +3,7 @@ import torch
 from torch import Tensor
 import logging
 from tqdm import trange
-from ..util import cos_sim, dot_score
+from sentence_transformers.util import cos_sim, dot_score
 import os
 import numpy as np
 from typing import Callable, Dict, List, Set
