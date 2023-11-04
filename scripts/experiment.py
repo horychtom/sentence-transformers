@@ -34,8 +34,8 @@ for i, row in tqdm(train_dataset.iterrows(), total=len(train_dataset)):
 for i, row in tqdm(dev_dataset.iterrows(), total=len(dev_dataset)):
     dev_examples.append(InputExample(texts=[row["text_x"], row["text_y"]]))
 
-train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=3)
-dev_dataloader = DataLoader(dev_examples, shuffle=True, batch_size=3)
+train_dataloader = DataLoader(train_examples, shuffle=True, batch_size=5)
+dev_dataloader = DataLoader(dev_examples, shuffle=True, batch_size=5)
 
 train_loss = MultipleNegativesRankingLoss(model=model)
 evaluator = MultipleNegativesRankingLossEvaluator(dev_dataloader)

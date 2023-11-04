@@ -71,7 +71,8 @@ class MultipleNegativesRankingLoss(nn.Module):
             range(len(scores)),
             dtype=torch.long,
             device=scores.device,
-        )  # Example a[i] should match with b[i]
+        )
+        # CE optimizes such that diagonal of similarity matrix is maximized and the rest is minimized
         return self.cross_entropy_loss(scores, labels)
 
     def get_config_dict(self):
